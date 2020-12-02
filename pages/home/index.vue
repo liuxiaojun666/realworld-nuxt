@@ -112,6 +112,7 @@ export default {
       getTags(),
       ((tab === 'your_feed' && store.state.user) ? getFeedArticles : getArticles)({ limit, offset: (page - 1) * limit, tag })
     ])
+    console.log(tagsData, articalData)
     const { articles, articlesCount } = articalData.data
     return {
       articles,
