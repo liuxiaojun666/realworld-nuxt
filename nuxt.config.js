@@ -34,13 +34,15 @@ module.exports = {
             {
               name: 'profile',
               path: 'profile/:username',
+              props: true,
               component: resolve(__dirname, 'pages/profile/')
             },
-            // {
-            //   name: 'favorites',
-            //   path: 'profile/:username/favorites',
-            //   component: resolve(__dirname, 'pages/login/')
-            // }
+            {
+              name: 'favorites',
+              path: 'profile/:username/favorites',
+              props: true,
+              component: resolve(__dirname, 'pages/profile/')
+            },
             {
               name: 'settings',
               path: 'settings',
@@ -48,7 +50,7 @@ module.exports = {
             },
             {
               name: 'editor',
-              path: 'editor',
+              path: 'editor/:slug?',
               component: resolve(__dirname, 'pages/editor/')
             },
             {

@@ -4,21 +4,26 @@
       <div class="row">
 
         <div class="col-md-10 offset-md-1 col-xs-12">
-          <form>
+          <form @submit.prevent="submit">
             <fieldset>
               <fieldset class="form-group">
-                  <input type="text" class="form-control form-control-lg" placeholder="Article Title">
+                  <input v-model="article.title" type="text" class="form-control form-control-lg" required placeholder="Article Title">
               </fieldset>
               <fieldset class="form-group">
-                  <input type="text" class="form-control" placeholder="What's this article about?">
+                  <input v-model="article.description" type="text" class="form-control" required placeholder="What's this article about?">
               </fieldset>
               <fieldset class="form-group">
-                  <textarea class="form-control" rows="8" placeholder="Write your article (in markdown)"></textarea>
+                  <textarea v-model="article.body" class="form-control" rows="8" required placeholder="Write your article (in markdown)"></textarea>
               </fieldset>
               <fieldset class="form-group">
-                  <input type="text" class="form-control" placeholder="Enter tags"><div class="tag-list"></div>
+                  <input @keydown.enter.prevent="addTag" v-model="tag" type="text" class="form-control" placeholder="Enter tags"><div class="tag-list"></div>
               </fieldset>
-              <button class="btn btn-lg pull-xs-right btn-primary" type="button">
+              <div class="tag-list">
+                <span v-for="(tag, index) in article.tagList" :key="tag" class="tag-default tag-pill">
+                  <i class="ion-close-round" @click="removeTag(index)"></i>{{tag}}
+                </span>
+              </div>
+              <button class="btn btn-lg pull-xs-right btn-primary" type="submit">
                   Publish Article
               </button>
             </fieldset>
@@ -31,8 +36,41 @@
 </template>
 
 <script>
+import { createArticle, updateArticle } from '@/api'
 export default {
-  middleware: ['authentecated']
+  middleware: ['authentecated'],
+  props: ['slug'],
+  asyncData ({ params }) {
+    if (params.slug) {
+
+    }
+    return {
+      tag: '',
+      article: {
+        title: '',
+        description: '',
+        body: '',
+        tagList: []
+      }
+    }
+  },
+  methods: {
+    addTag () {
+      const tag = this.tag.trim()
+      if (this.article.tagList.includes(tag)) return
+      this.article.tagList.push(tag);
+      this.tag = '';
+    },
+    removeTag (index) {
+      this.article.tagList.splice(index, 1)
+    },
+    async submit () {
+      if (this.lock) return
+      this.lock = true
+      await (this.slug ? updateArticle : createArticle)({ article: this.article, slug: this.slug })
+      this.$router.push({ name: 'profile', params: { username: this.$store.state.user.username } })
+    }
+  }
 }
 </script>
 

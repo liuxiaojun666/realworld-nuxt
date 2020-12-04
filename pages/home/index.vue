@@ -33,37 +33,9 @@
             </ul>
           </div>
 
-          <div v-for="item in articles" :key="item.slug" class="article-preview">
-            <div class="article-meta">
-              <nuxt-link :to="{
-                name: 'profile',
-                params: {
-                  username: item.author.username
-                }
-              }">
-                <img v-if="item.author.image" :src="item.author.image" />
-              </nuxt-link>
-              <div class="info">
-                <nuxt-link :to="{
-                  name: 'profile',
-                  params: {
-                    username: item.author.username
-                  }
-                }" class="author">{{ item.author.username }}</nuxt-link>
-                <span class="date">{{ item.createdAt | date('MMM DD, YYYY') }}</span>
-              </div>
-              <button @click="onFavorive(item)" class="btn btn-outline-primary btn-sm pull-xs-right" :class="{ 'active': item.favorited }">
-                <i class="ion-heart"></i> {{ item.favoritesCount }}
-              </button>
-            </div>
-            <nuxt-link :to="{ name: 'article', params: { slug: item.slug } }" class="preview-link">
-              <h1>{{ item.title }}</h1>
-              <p>{{ item.description }}</p>
-              <span>Read more...</span>
-            </nuxt-link>
-          </div>
+          <article-item v-for="article in articles" :key="article.slug" :article="article"></article-item>
 
-          <ul class="pagination">
+          <ul v-if="totalPage > 1" class="pagination">
             <li class="page-item" :class="{'active': item === page}" v-for="item in totalPage" :key="item">
               <nuxt-link class="page-link" :to="{
                 name: 'home',
@@ -78,8 +50,11 @@
           <div class="sidebar">
             <p>Popular Tags</p>
 
-            <div v-for="item in tags" :key="item" class="tag-list">
-              <nuxt-link :to="{
+            <div class="tag-list">
+              <nuxt-link 
+               v-for="item in tags"
+               :key="item"
+               :to="{
                 name: 'home',
                 query: { tag: item }
               }" class="tag-pill tag-default">{{item}}</nuxt-link>
@@ -97,11 +72,11 @@
 import {
   getArticles,
   getTags,
-  getFeedArticles,
-  addFavorite,
-  deleteFavorite
+  getFeedArticles
 } from '@/api'
+import articleItem from '../../components/article-item.vue'
 export default {
+  components: { articleItem },
   name: 'HomeIndex',
   watchQuery: ['page', 'tag', 'tab'],
   async asyncData ({ query, store }) {
@@ -113,6 +88,7 @@ export default {
       ((tab === 'your_feed' && store.state.user) ? getFeedArticles : getArticles)({ limit, offset: (page - 1) * limit, tag })
     ])
     const { articles, articlesCount } = articalData.data
+    const tags = tagsData.data.tags
     return {
       articles,
       articlesCount,
@@ -120,28 +96,12 @@ export default {
       page,
       tab,
       tag,
-      tags: tagsData.data.tags
+      tags
     }
   },
   computed: {
     totalPage () {
       return Math.ceil(this.articlesCount / this.limit)
-    }
-  },
-  methods: {
-    async onFavorive (article) {
-      if (article.favoriteDisabled) return
-      article.favoriteDisabled = true
-      if (article.favorited) {
-        await deleteFavorite(article.slug)
-        article.favorited = false
-        article.favoritesCount += -1
-      } else {
-        await addFavorite(article.slug)
-        article.favorited = true
-        article.favoritesCount += 1
-      }
-      article.favoriteDisabled = false
     }
   }
 }

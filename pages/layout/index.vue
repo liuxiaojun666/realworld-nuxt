@@ -31,8 +31,11 @@
             </li>
           </template>
           <li v-if="user" class="nav-item">
-            <nuxt-link class="nav-link active" to="/profile/123">
-              <img v-if="user.image" :src="user.image" alt="头像">{{user.username}}
+            <nuxt-link
+              class="nav-link"
+              :class="{ active: $route.name === 'profile' && $route.params.username === user.username }"
+              :to="{ name: 'profile', params: { username: user.username } }">
+              <img v-if="user.image" :src="user.image" alt="头像" class="user-pic">{{user.username}}
             </nuxt-link>
           </li>
         </ul>
