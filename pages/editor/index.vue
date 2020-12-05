@@ -36,15 +36,13 @@
 </template>
 
 <script>
-import { createArticle, updateArticle } from '@/api'
+import { createArticle, updateArticle, getArticle } from '@/api'
 export default {
+  name: 'EditorIndex',
   middleware: ['authentecated'],
   props: ['slug'],
-  asyncData ({ params }) {
-    if (params.slug) {
-
-    }
-    return {
+  async asyncData ({ params }) {
+    const resultData = {
       tag: '',
       article: {
         title: '',
@@ -53,6 +51,11 @@ export default {
         tagList: []
       }
     }
+    if (params.slug) {
+      const { data } = await getArticle(params.slug)
+      resultData.article = data.article
+    }
+    return resultData
   },
   methods: {
     addTag () {

@@ -22,15 +22,25 @@ export const getTags = params => request({ method: 'GET', url: '/api/tags', para
 export const createArticle = data => request({ method: 'POST', url: '/api/articles', data })
 // 更新文章
 export const updateArticle = data => request({ method: 'PUT', url: `/api/articles/${data.slug}`, data })
+// 获取文章
+export const getArticle = slug => request({ method: 'GET', url: `/api/articles/${slug}` })
+// 删除文章
+export const deleteArticle = slug => request({ method: 'DELETE', url: `/api/articles/${slug}` })
 // 文章列表
 export const getArticles = params => request({ method: 'GET', url: '/api/articles', params })
+
+
 // 用户关注的文章列表
 export const getFeedArticles = params => request({ method: 'GET', url: '/api/articles/feed', params })
 // 文章点赞
 export const addFavorite = slug => request({ method: 'POST', url: `/api/articles/${slug}/favorite` })
 // 文章取消点赞
 export const deleteFavorite = slug => request({ method: 'DELETE', url: `/api/articles/${slug}/favorite` })
-// 获取文章详情
-export const getArticle = slug => request({ method: 'get', url: `/api/articles/${slug}` })
+
+
 // 获取文章评论
-export const getComments = slug => request({ method: 'get', url: `/api/articles/${slug}/comments` })
+export const getComments = slug => request({ method: 'GET', url: `/api/articles/${slug}/comments` })
+// 添加文章评论
+export const addComments = (slug, data) => request({ method: 'POST', url: `/api/articles/${slug}/comments`, data })
+// 删除文章评论
+export const deleteComments = (slug, id) => request({ method: 'DELETE', url: `/api/articles/${slug}/comments/${id}` })

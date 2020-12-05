@@ -51,6 +51,7 @@ module.exports = {
             {
               name: 'editor',
               path: 'editor/:slug?',
+              props: true,
               component: resolve(__dirname, 'pages/editor/')
             },
             {
