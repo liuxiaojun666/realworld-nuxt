@@ -18,5 +18,8 @@
     "js-cookie": "^2.2.1",
     "markdown-it": "^12.0.2",
     "nuxt": "^2.14.7"
+  },
+  "devDependencies": {
+    "@nuxtjs/vercel-builder": "^0.18.1"
   }
 }
