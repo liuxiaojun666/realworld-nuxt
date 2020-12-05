@@ -99,6 +99,11 @@ export default {
       tags
     }
   },
+  head () {
+    return {
+      title: `Home - RealWorld`
+    }
+  },
   computed: {
     totalPage () {
       return Math.ceil(this.articlesCount / this.limit)

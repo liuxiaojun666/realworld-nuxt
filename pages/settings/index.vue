@@ -51,6 +51,11 @@ export default {
       formDisabled: false
     }
   },
+  head () {
+    return {
+      title: `Settings - RealWorld`
+    }
+  },
   methods: {
     async updateUser () {
       if (this.formDisabled) return

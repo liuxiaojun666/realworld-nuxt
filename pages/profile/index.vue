@@ -77,6 +77,11 @@ export default {
     result.articles = []
     return result
   },
+  head () {
+    return {
+      title: `${this.username} - RealWorld`
+    }
+  },
   methods: {
     async followProfiles () {
       if (this.flag) return

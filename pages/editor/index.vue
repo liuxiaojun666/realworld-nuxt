@@ -57,6 +57,11 @@ export default {
     }
     return resultData
   },
+  head () {
+    return {
+      title: `Editor - RealWorld`
+    }
+  },
   methods: {
     addTag () {
       const tag = this.tag.trim()
