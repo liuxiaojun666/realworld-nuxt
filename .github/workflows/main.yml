@@ -59,4 +59,5 @@ jobs:
           npm install --production
           pm2 unstartup systemd
           pm2 reload pm2.config.json
+          pm2 save
           pm2 startup
